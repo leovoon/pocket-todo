@@ -37,13 +37,17 @@ export default function TodoListItem({
     <Dialog open={updateDialogOpen} onOpenChange={setUpdateDialogOpen}>
       <div className="flex items-center border shadow-sm">
         <TodoCompleteForm id={id} completed={completed} />
-        <div key={id} className="flex flex-col gap-2 w-full" ref={hoverRef}>
-          <div className="flex items-center justify-start p-4 ">
+        <div
+          key={id}
+          className="flex flex-col w-full h-full justify-between"
+          ref={hoverRef}
+        >
+          <div className="flex items-center justify-start p-4 w-full ">
             <span>{title}</span>
           </div>
           <div
             className={cn(
-              "w-full h-1/4 py-2 backdrop-blur transition duration-500 items-center justify-evenly ",
+              "w-full h-1/4 py-2 items-center justify-evenly ",
               menuOpenClassName
             )}
           >
@@ -51,7 +55,7 @@ export default function TodoListItem({
               <Edit size={16} strokeWidth={1} className="cursor-pointer" />
             </DialogTrigger>
             <Separator orientation="vertical" />
-            <TodoDeleteConfirmDialog title={title} id={id} />
+            <TodoDeleteConfirmDialog id={id} />
           </div>
         </div>
       </div>

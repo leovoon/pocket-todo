@@ -1,3 +1,4 @@
+import { MouseEvent } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,14 +13,21 @@ import {
 import { toast } from "./ui/use-toast";
 import { Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-type TodoProps = {
-  title: string;
-  id: number;
-};
+import { useState } from "react";
+import { TailSpin } from "react-loader-spinner";
 
-export function TodoDeleteConfirmDialog({ title, id }: TodoProps) {
+export function TodoDeleteConfirmDialog({ id }: { id: number }) {
   const route = useRouter();
-  async function handleConfirmDelete() {
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+  async function wait(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+  async function handleConfirmDelete(e: MouseEvent) {
+    e.preventDefault();
+    setDeleting(true);
+    setDeleteDialogOpen(true);
     const deleted = await fetch(`api/todos/${id}/del`, {
       method: "DELETE",
     });
@@ -29,10 +37,12 @@ export function TodoDeleteConfirmDialog({ title, id }: TodoProps) {
         title: `You deleted a todo #${id}.`,
       });
       route.refresh();
+      setDeleting(false);
+      setDeleteDialogOpen(false);
     }
   }
   return (
-    <AlertDialog>
+    <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
       <AlertDialogTrigger asChild>
         <Trash2 size={16} strokeWidth={1} className="cursor-pointer" />
       </AlertDialogTrigger>
@@ -48,8 +58,24 @@ export function TodoDeleteConfirmDialog({ title, id }: TodoProps) {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleConfirmDelete}>
-            Yes
+          <AlertDialogAction
+            disabled={deleting}
+            onClick={(e) => handleConfirmDelete(e)}
+          >
+            {deleting ? (
+              <TailSpin
+                height="20"
+                width="30"
+                color="white"
+                ariaLabel="tail-spin-loading"
+                radius="1"
+                wrapperStyle={{}}
+                wrapperClass=""
+                visible={true}
+              />
+            ) : (
+              "Yes"
+            )}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

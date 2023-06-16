@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/form";
 import { TodoSchema } from "prisma/generated/zod";
 import { useRouter } from "next/navigation";
+import { TailSpin } from "react-loader-spinner";
 
 export const TodoUpdateForm = ({
   id,
@@ -88,7 +89,20 @@ export const TodoUpdateForm = ({
           disabled={isSubmitting || title === form.getValues("title")}
           className="self-end"
         >
-          Save
+          {isSubmitting ? (
+            <TailSpin
+              height="20"
+              width="30"
+              color="white"
+              ariaLabel="tail-spin-loading"
+              radius="1"
+              wrapperStyle={{}}
+              wrapperClass=""
+              visible={true}
+            />
+          ) : (
+            "Save"
+          )}
         </Button>
       </form>
     </Form>
