@@ -12,6 +12,16 @@ export const theme = {
     },
   },
   extend: {
+    fontSize: {
+      sm: "1.2rem",
+      base: "1.5rem",
+      lg: "1.8rem",
+      xl: "1.875rem",
+      "2xl": "2.3445rem",
+      "3xl": "2.9295rem",
+      "4xl": "3.6615rem",
+      "5xl": "4.578rem",
+    },
     colors: {
       border: "hsl(var(--border))",
       input: "hsl(var(--input))",
