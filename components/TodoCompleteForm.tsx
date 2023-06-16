@@ -7,7 +7,7 @@ import * as z from "zod";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "@/components/ui/use-toast";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { TodoSchema } from "@/prisma/generated/zod";
+import { TodoCompleteSchema } from "@/prisma/generated/zod";
 import { useRouter } from "next/navigation";
 import { CheckedState } from "@radix-ui/react-checkbox";
 
@@ -19,8 +19,8 @@ export function TodoCompleteForm({
   completed: boolean;
 }) {
   const route = useRouter();
-  const form = useForm<z.infer<typeof TodoSchema>>({
-    resolver: zodResolver(TodoSchema),
+  const form = useForm<z.infer<typeof TodoCompleteSchema>>({
+    resolver: zodResolver(TodoCompleteSchema),
     defaultValues: {
       completed,
     },
@@ -33,7 +33,7 @@ export function TodoCompleteForm({
     handleSubmit(onSubmit)();
   }
 
-  async function onSubmit(data: z.infer<typeof TodoSchema>) {
+  async function onSubmit(data: z.infer<typeof TodoCompleteSchema>) {
     const updated = await fetch(`api/todos/${id}/toggle`, {
       method: "PATCH",
       body: JSON.stringify(data),
