@@ -1,15 +1,19 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# pocket-todo
+
+![alt text](app/icon1.png)
+
+A Next.js todo app that utilizes the [shadcn-ui UI](https://ui.shadcn.com/) library and stores data in a postgres storage hosted on Vercel.
 
 ## Getting Started
 
 First, run the development server:
 
+I use antfu's [ni](https://github.com/antfu/ni) package manager and [pnpm](https://pnpm.io/installation)
+
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+ni
+
+nr dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
