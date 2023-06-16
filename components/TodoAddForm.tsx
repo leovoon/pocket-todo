@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -15,14 +15,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { TodoCreateInputSchema } from "prisma/generated/zod";
+import { TodoSchema } from "prisma/generated/zod";
 import { useRouter } from "next/navigation";
 import { TailSpin } from "react-loader-spinner";
 
 export const TodoAddForm = () => {
   const route = useRouter();
-  const form = useForm<z.infer<typeof TodoCreateInputSchema>>({
-    resolver: zodResolver(TodoCreateInputSchema),
+  const form = useForm<z.infer<typeof TodoSchema>>({
+    resolver: zodResolver(TodoSchema),
     defaultValues: {
       title: "",
       completed: false,
@@ -31,7 +31,7 @@ export const TodoAddForm = () => {
 
   const { isSubmitting, isValid } = form.formState;
 
-  async function onSubmit(data: z.infer<typeof TodoCreateInputSchema>) {
+  async function onSubmit(data: z.infer<typeof TodoSchema>) {
     try {
       const created = await fetch("api/todos/create", {
         method: "POST",
