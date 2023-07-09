@@ -4,6 +4,10 @@
 
 A Next.js todo app that utilizes the [shadcn-ui UI](https://ui.shadcn.com/) library and stores data in a postgres storage hosted on Vercel.
 
+## Todo
+- [x] CRUD
+- [ ] Authentication
+
 ## Getting Started
 
 First, run the development server:
