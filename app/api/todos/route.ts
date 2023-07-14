@@ -3,29 +3,23 @@ import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
-export async function PATCH(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
+export async function GET(req: Request) {
   const session = await getServerSession({ req, ...authOptions });
   if (!session) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
 
-  const body = await req.json();
-  const { id } = params;
   try {
-    const updatedTodo = await prisma.todo.update({
+    const todos = await prisma.todo.findMany({
       where: {
-        id: id,
-      },
-      data: {
-        completed: body.completed,
+        author: {
+          email: session.user.email,
+        },
       },
     });
-    return NextResponse.json(updatedTodo, { status: 200 });
+
+    return NextResponse.json(todos, { status: 200 });
   } catch (error) {
-    console.log(error);
     return NextResponse.json({ error }, { status: 500 });
   }
 }
