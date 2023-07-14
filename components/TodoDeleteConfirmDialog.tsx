@@ -56,7 +56,7 @@ export function TodoDeleteConfirmDialog({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Are you absolutely sure to delete "{title}"?
+            Are you absolutely sure to delete {`"${title}"`}?
           </AlertDialogTitle>
           <AlertDialogDescription>
             This action cannot be undone. This will permanently delete your todo
