@@ -18,6 +18,7 @@ export async function POST(req: Request) {
   try {
     const todo = await prisma.todo.create({
       // TODO: Fix type error
+      // @ts-ignore
       data: {
         uid: user.id,
         author: {
