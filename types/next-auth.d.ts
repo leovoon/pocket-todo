@@ -2,10 +2,12 @@ import NextAuth from "next-auth";
 
 declare module "next-auth" {
   interface Session {
+    id: string;
     user: {
+      id: string;
       name: string;
       email: string;
-      id: string;
+      image: string;
     };
   }
 

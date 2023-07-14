@@ -23,10 +23,8 @@ export const authOptions: NextAuthOptions = {
     session: async ({ session, user }) => {
       if (session.user) {
         // ** Add custom params to user in session which are added in `jwt()` callback via `token` parameter
-        return {
-          ...session,
-          id: user.id,
-        };
+        session.user.id = user.id;
+        return session;
       }
       return session;
     },

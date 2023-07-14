@@ -55,7 +55,7 @@ export default function TodoListItem({
               <Edit size={16} strokeWidth={1} className="cursor-pointer" />
             </DialogTrigger>
             <Separator orientation="vertical" />
-            <TodoDeleteConfirmDialog id={id} />
+            <TodoDeleteConfirmDialog id={id} title={title} />
           </div>
         </div>
       </div>

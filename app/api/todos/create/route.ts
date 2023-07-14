@@ -9,22 +9,13 @@ export async function POST(req: Request) {
   if (!session) {
     return NextResponse.redirect("/signin", { status: 302 });
   }
-  const user = {
-    // @ts-ignore
-    id: session.id,
-    name: session.user.name,
-    email: session.user.email,
-  };
-  console.log("sss", user);
+
   try {
     const todo = await prisma.todo.create({
-      // TODO: Fix type error
-      // @ts-ignore
       data: {
-        uid: user.id,
         author: {
           connect: {
-            id: user.id,
+            id: session.user.id,
           },
         },
         title: body.title,

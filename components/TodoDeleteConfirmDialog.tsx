@@ -17,7 +17,13 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { TailSpin } from "react-loader-spinner";
 
-export function TodoDeleteConfirmDialog({ id }: { id: number }) {
+export function TodoDeleteConfirmDialog({
+  id,
+  title,
+}: {
+  id: number;
+  title: string;
+}) {
   const route = useRouter();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -50,7 +56,7 @@ export function TodoDeleteConfirmDialog({ id }: { id: number }) {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Are you absolutely sure to delete #{id}?
+            Are you absolutely sure to delete "{title}"?
           </AlertDialogTitle>
           <AlertDialogDescription>
             This action cannot be undone. This will permanently delete your todo

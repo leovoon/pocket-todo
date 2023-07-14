@@ -13,7 +13,7 @@ export async function GET(req: Request) {
     const todos = await prisma.todo.findMany({
       where: {
         author: {
-          email: session.user.email,
+          id: session.user.id,
         },
       },
     });

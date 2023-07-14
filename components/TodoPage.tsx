@@ -14,7 +14,7 @@ export default function TodoPage() {
         <div className="fixed bottom-0 left-0 flex gap-2 p-2 m-2">
           <div className="rounded-full bg-gray-100 dark:bg-gray-800">
             <Image
-              src={session.user.image!}
+              src={session.user.image}
               width={24}
               height={24}
               alt="user profile"
