@@ -1,13 +1,15 @@
 # pocket-todo
 
-![alt text](app/icon1.png)
+<div align="center">
+<img src="app/apple-icon.png" width="65" />
+</div>
 
-A Next.js todo app that utilizes the [shadcn-ui UI](https://ui.shadcn.com/) library and stores data in a postgres storage hosted on Vercel.
+A Next.js todo app that utilizes the [shadcn-ui UI](https://ui.shadcn.com/) and stores data in a postgres storage hosted on Vercel.
 
 ## Todo
 - [x] CRUD
-- [ ] Authentication
-
+- [x] Authentication
+- [ ] Migrate to Next App router
 ## Getting Started
 
 First, run the development server:
