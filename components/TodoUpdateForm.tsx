@@ -54,7 +54,7 @@ export const TodoUpdateForm = ({
       if (created.ok) {
         toast({
           title: "Task Updated",
-          description: "Your task has been created",
+          description: "Your task has been updated.",
         });
         route.refresh();
         onUpdated();
