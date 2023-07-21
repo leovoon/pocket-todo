@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { TodoAddForm } from "@/components/TodoAddForm";
+import { TodoAddForm } from "@/components/todo/TodoAddForm";
 import { PlusSquare } from "lucide-react";
 
 export default function TodoDialog() {

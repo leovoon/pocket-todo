@@ -5,11 +5,16 @@ import { z } from "zod";
 /////////////////////////////////////////
 
 export const TodoSchema = z.object({
-  id: z.number().int().optional(),
-  title: z.string().min(1, { message: "Too short" }).max(255),
+  id: z.string().min(1),
+  title: z.string(),
   completed: z.boolean(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
+});
+
+export const TodoUpsertSchema = z.object({
+  title: z.string().min(1, { message: "Too short" }).max(255),
+  completed: z.boolean(),
 });
 
 export const TodoCompleteSchema = z.object({

@@ -1,16 +1,12 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/pages/api/auth/[...nextauth]";
+import { getSessionOrReject } from "@/lib/auth";
 
 export async function PATCH(
   req: Request,
   { params }: { params: { id: string } }
 ) {
-  const session = await getServerSession({ req, ...authOptions });
-  if (!session) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
-  }
+  await getSessionOrReject(req);
 
   const body = await req.json();
   const { id } = params;

@@ -1,17 +1,13 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/pages/api/auth/[...nextauth]";
+import { getSessionOrReject } from "@/lib/auth";
 
 export async function DELETE(
   req: Request,
   { params }: { params: { id: string } }
 ) {
-  const session = await getServerSession({ req, ...authOptions });
-  if (!session) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
-  }
+  await getSessionOrReject(req);
 
   const { id } = params;
   try {
@@ -20,7 +16,7 @@ export async function DELETE(
         id: id,
       },
     });
-    revalidatePath("/");
+    revalidatePath("/todos");
     return NextResponse.json(deleted, { status: 200 });
   } catch (error) {
     console.log(error);

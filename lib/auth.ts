@@ -1,8 +1,10 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+import type { NextAuthOptions, Session } from "next-auth";
+import { getServerSession } from "next-auth/next";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import type { Adapter } from "next-auth/adapters";
 import { PrismaClient } from "@prisma/client";
+import { NextRequest, NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
@@ -31,4 +33,14 @@ export const authOptions: NextAuthOptions = {
   },
 };
 
-export default NextAuth(authOptions);
+export async function getSessionOrReject(
+  req: Request
+): Promise<Session | NextResponse> {
+  const session = await getServerSession({ req, ...authOptions });
+
+  if (!session) {
+    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+  }
+
+  return session;
+}

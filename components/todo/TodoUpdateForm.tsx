@@ -15,7 +15,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { TodoSchema } from "prisma/generated/zod";
+import { TodoSchema, TodoUpsertSchema } from "prisma/generated/zod";
 import { useRouter } from "next/navigation";
 import { TailSpin } from "react-loader-spinner";
 
@@ -25,14 +25,14 @@ export const TodoUpdateForm = ({
   completed,
   onUpdated,
 }: {
-  id: number;
+  id: string;
   title: string;
   completed: boolean;
   onUpdated: () => void;
 }) => {
   const route = useRouter();
-  const form = useForm<z.infer<typeof TodoSchema>>({
-    resolver: zodResolver(TodoSchema),
+  const form = useForm<z.infer<typeof TodoUpsertSchema>>({
+    resolver: zodResolver(TodoUpsertSchema),
     defaultValues: {
       title,
       completed,
@@ -41,7 +41,7 @@ export const TodoUpdateForm = ({
 
   const { isSubmitting, isValid } = form.formState;
 
-  async function onSubmit(data: z.infer<typeof TodoSchema>) {
+  async function onSubmit(data: z.infer<typeof TodoUpsertSchema>) {
     try {
       const created = await fetch(`api/todos/${id}/edit`, {
         method: "PUT",

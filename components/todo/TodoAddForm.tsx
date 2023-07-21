@@ -15,23 +15,22 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { TodoSchema } from "prisma/generated/zod";
+import { TodoSchema, TodoUpsertSchema } from "prisma/generated/zod";
 import { useRouter } from "next/navigation";
 import { TailSpin } from "react-loader-spinner";
 
 export const TodoAddForm = () => {
   const route = useRouter();
-  const form = useForm<z.infer<typeof TodoSchema>>({
-    resolver: zodResolver(TodoSchema),
+  const form = useForm<z.infer<typeof TodoUpsertSchema>>({
+    resolver: zodResolver(TodoUpsertSchema),
     defaultValues: {
-      title: "",
       completed: false,
     },
   });
 
   const { isSubmitting, isValid } = form.formState;
 
-  async function onSubmit(data: z.infer<typeof TodoSchema>) {
+  async function onSubmit(data: z.infer<typeof TodoUpsertSchema>) {
     try {
       const created = await fetch("api/todos/create", {
         method: "POST",

@@ -7,17 +7,11 @@ import * as z from "zod";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "@/components/ui/use-toast";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { TodoCompleteSchema } from "@/prisma/generated/zod";
+import { Todo, TodoCompleteSchema } from "@/prisma/generated/zod";
 import { useRouter } from "next/navigation";
 import { CheckedState } from "@radix-ui/react-checkbox";
 
-export function TodoCompleteForm({
-  id,
-  completed,
-}: {
-  id: number;
-  completed: boolean;
-}) {
+export function TodoCompleteForm({ id, completed }: Todo) {
   const route = useRouter();
   const form = useForm<z.infer<typeof TodoCompleteSchema>>({
     resolver: zodResolver(TodoCompleteSchema),

@@ -11,26 +11,18 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { toast } from "./ui/use-toast";
+import { toast } from "@/components/ui/use-toast";
 import { Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { TailSpin } from "react-loader-spinner";
+import { Todo } from "@/prisma/generated/zod";
 
-export function TodoDeleteConfirmDialog({
-  id,
-  title,
-}: {
-  id: number;
-  title: string;
-}) {
+export function TodoDeleteConfirmDialog({ id, title }: Todo) {
   const route = useRouter();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
-  async function wait(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
   async function handleConfirmDelete(e: MouseEvent) {
     e.preventDefault();
     setDeleting(true);

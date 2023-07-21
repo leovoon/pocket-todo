@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import { TodoDeleteConfirmDialog } from "@/components/TodoDeleteConfirmDialog";
-import { TodoCompleteForm } from "@/components/TodoCompleteForm";
+import { TodoDeleteConfirmDialog } from "@/components/todo/TodoDeleteConfirmDialog";
+import { TodoCompleteForm } from "@/components/todo/TodoCompleteForm";
 import {
   Dialog,
   DialogContent,
@@ -15,17 +15,10 @@ import { TodoUpdateForm } from "./TodoUpdateForm";
 import { Edit } from "lucide-react";
 import { useHover } from "usehooks-ts";
 import { cn } from "@/lib/utils";
-import { Separator } from "./ui/separator";
+import { Separator } from "@/components/ui/separator";
+import { Todo } from "@/prisma/generated/zod";
 
-export default function TodoListItem({
-  id,
-  title,
-  completed,
-}: {
-  id: number;
-  title: string;
-  completed: boolean;
-}) {
+export default function TodoListItem({ id, title, completed }: Todo) {
   const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
   const hoverRef = useRef(null);
   const isHovering = useHover(hoverRef);
@@ -36,7 +29,7 @@ export default function TodoListItem({
   return (
     <Dialog open={updateDialogOpen} onOpenChange={setUpdateDialogOpen}>
       <div className="flex items-center border shadow-sm">
-        <TodoCompleteForm id={id} completed={completed} />
+        <TodoCompleteForm id={id} completed={completed} title={title} />
         <div
           key={id}
           className="flex flex-col w-full h-full justify-between"
@@ -55,7 +48,11 @@ export default function TodoListItem({
               <Edit size={16} strokeWidth={1} className="cursor-pointer" />
             </DialogTrigger>
             <Separator orientation="vertical" />
-            <TodoDeleteConfirmDialog id={id} title={title} />
+            <TodoDeleteConfirmDialog
+              id={id}
+              title={title}
+              completed={completed}
+            />
           </div>
         </div>
       </div>
