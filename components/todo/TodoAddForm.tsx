@@ -7,20 +7,21 @@ import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { TodoSchema, TodoUpsertSchema } from "prisma/generated/zod";
 import { useRouter } from "next/navigation";
 import { TailSpin } from "react-loader-spinner";
+import { prisma } from "@/lib/prisma";
+import { useSession } from "next-auth/react";
+import { revalidatePath } from "next/cache";
+import { createTodo } from "./actions";
 
-export const TodoAddForm = () => {
-  const route = useRouter();
+type TodoAddFormProps = {
+  onTodoCreated: () => void;
+};
+export const TodoAddForm = ({ onTodoCreated }: TodoAddFormProps) => {
+  const { data: session } = useSession();
+
   const form = useForm<z.infer<typeof TodoUpsertSchema>>({
     resolver: zodResolver(TodoUpsertSchema),
     defaultValues: {
@@ -32,21 +33,16 @@ export const TodoAddForm = () => {
 
   async function onSubmit(data: z.infer<typeof TodoUpsertSchema>) {
     try {
-      const created = await fetch("api/todos/create", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      if (!session) throw new Error("User is not logged in");
+      const todo = await createTodo(data, session.user.id);
 
-      if (created.ok) {
+      if (todo) {
         toast({
           title: "Task created",
           description: "Your task has been created",
         });
         form.reset();
-        route.refresh();
+        onTodoCreated();
       }
     } catch (error) {
       console.error(error);
@@ -55,10 +51,7 @@ export const TodoAddForm = () => {
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6 flex flex-col"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 flex flex-col">
         <FormField
           control={form.control}
           name="title"
@@ -73,11 +66,7 @@ export const TodoAddForm = () => {
           )}
         />
 
-        <Button
-          type="submit"
-          disabled={isSubmitting || !isValid}
-          className="self-end"
-        >
+        <Button type="submit" disabled={isSubmitting || !isValid} className="self-end">
           {isSubmitting ? (
             <TailSpin
               height="20"

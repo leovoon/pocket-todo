@@ -7,17 +7,11 @@ import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { TodoSchema, TodoUpsertSchema } from "prisma/generated/zod";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { TodoUpsertSchema } from "prisma/generated/zod";
 import { useRouter } from "next/navigation";
 import { TailSpin } from "react-loader-spinner";
+import { updateTodo } from "./actions";
 
 export const TodoUpdateForm = ({
   id,
@@ -43,20 +37,13 @@ export const TodoUpdateForm = ({
 
   async function onSubmit(data: z.infer<typeof TodoUpsertSchema>) {
     try {
-      const created = await fetch(`api/todos/${id}/edit`, {
-        method: "PUT",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const updated = await updateTodo(data, id);
 
-      if (created.ok) {
+      if (updated) {
         toast({
           title: "Task Updated",
           description: "Your task has been updated.",
         });
-        route.refresh();
         onUpdated();
       }
     } catch (error) {
@@ -66,10 +53,7 @@ export const TodoUpdateForm = ({
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6 flex flex-col"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 flex flex-col">
         <FormField
           control={form.control}
           name="title"
@@ -84,11 +68,7 @@ export const TodoUpdateForm = ({
           )}
         />
 
-        <Button
-          type="submit"
-          disabled={isSubmitting || title === form.getValues("title")}
-          className="self-end"
-        >
+        <Button type="submit" disabled={isSubmitting || title === form.getValues("title")} className="self-end">
           {isSubmitting ? (
             <TailSpin
               height="20"

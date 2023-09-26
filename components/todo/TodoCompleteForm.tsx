@@ -10,6 +10,7 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Todo, TodoCompleteSchema } from "@/prisma/generated/zod";
 import { useRouter } from "next/navigation";
 import { CheckedState } from "@radix-ui/react-checkbox";
+import { toggleComplete } from "./actions";
 
 export function TodoCompleteForm({ id, completed }: Todo) {
   const route = useRouter();
@@ -28,20 +29,11 @@ export function TodoCompleteForm({ id, completed }: Todo) {
   }
 
   async function onSubmit(data: z.infer<typeof TodoCompleteSchema>) {
-    const updated = await fetch(`api/todos/${id}/toggle`, {
-      method: "PATCH",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (updated.ok) {
-      console.log(updated);
+    const updated = await toggleComplete(data, id);
+    if (updated) {
       toast({
-        title: `You updated a todo #${id}.`,
+        title: `You updated a todo to ${updated.completed ? "completed" : "not completed"}.`,
       });
-      route.refresh();
     }
   }
 
@@ -54,10 +46,7 @@ export function TodoCompleteForm({ id, completed }: Todo) {
           render={() => (
             <FormItem className="flex flex-row items-center justify-center space-x-3 space-y-0 rounded-md p-4">
               <FormControl>
-                <Checkbox
-                  checked={form.getValues("completed") as boolean}
-                  onCheckedChange={handleCheckboxChange}
-                />
+                <Checkbox checked={form.getValues("completed") as boolean} onCheckedChange={handleCheckboxChange} />
               </FormControl>
             </FormItem>
           )}

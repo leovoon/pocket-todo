@@ -13,7 +13,7 @@ export const TodoSchema = z.object({
 });
 
 export const TodoUpsertSchema = z.object({
-  title: z.string().min(1, { message: "Too short" }).max(255),
+  title: z.string().min(1, { message: "Too short" }).max(50, { message: "Too long" }),
   completed: z.boolean(),
 });
 

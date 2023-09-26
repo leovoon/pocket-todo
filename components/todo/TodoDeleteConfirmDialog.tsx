@@ -1,5 +1,5 @@
 "use client";
-import { MouseEvent } from "react";
+import { MouseEvent, useMemo } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { TailSpin } from "react-loader-spinner";
 import { Todo } from "@/prisma/generated/zod";
+import { deleteTodo } from "./actions";
 
 export function TodoDeleteConfirmDialog({ id, title }: Todo) {
   const route = useRouter();
@@ -27,19 +28,24 @@ export function TodoDeleteConfirmDialog({ id, title }: Todo) {
     e.preventDefault();
     setDeleting(true);
     setDeleteDialogOpen(true);
-    const deleted = await fetch(`api/todos/${id}/del`, {
-      method: "DELETE",
-    });
+    const deleted = await deleteTodo(id);
 
-    if (deleted.ok) {
+    if (deleted) {
       toast({
-        title: `You deleted a todo #${id}.`,
+        title: `You deleted a todo #${formattedTitle}.`,
       });
-      route.refresh();
       setDeleting(false);
       setDeleteDialogOpen(false);
     }
   }
+
+  const formattedTitle = useMemo(() => {
+    if (title.length > 30) {
+      return title.substring(0, 10) + "...";
+    } else {
+      return title;
+    }
+  }, [title]);
   return (
     <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
       <AlertDialogTrigger asChild>
@@ -48,19 +54,15 @@ export function TodoDeleteConfirmDialog({ id, title }: Todo) {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Are you absolutely sure to delete {`"${title}"`}?
+            Are you absolutely sure to delete <i>{formattedTitle}</i>?
           </AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your todo
-            and remove your data from our servers.
+            This action cannot be undone. This will permanently delete your todo and remove your data from our servers.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            disabled={deleting}
-            onClick={(e) => handleConfirmDelete(e)}
-          >
+          <AlertDialogAction disabled={deleting} onClick={(e) => handleConfirmDelete(e)}>
             {deleting ? (
               <TailSpin
                 height="20"

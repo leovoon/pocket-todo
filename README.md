@@ -10,7 +10,7 @@ A Next.js todo app that utilizes the [shadcn-ui UI](https://ui.shadcn.com/) and 
 - [x] CRUD
 - [x] Authentication
 - [x] Migrate from pages router to App router
-- [ ] Server actions
+- [x] Server actions
 
 ## Getting Started
 
